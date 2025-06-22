@@ -13,15 +13,13 @@ const TICK: Duration = Duration::from_millis(500);
 
 fn main() -> anyhow::Result<()> {
     enable_raw_mode()?;
-
     let mut ui = UI::new()?;
+    ui.clear()?;                        
     let mut mon = Monitor::new();
 
     loop {
         let start = Instant::now();
-
-        let snap = mon.sample()?;
-        ui.draw(&snap)?;
+        ui.draw(&mon.sample()?)?;
 
         while event::poll(Duration::from_millis(0))? {
             if let Event::Key(k) = event::read()? {
@@ -32,9 +30,8 @@ fn main() -> anyhow::Result<()> {
                 }
             }
         }
-
-        if let Some(remaining) = TICK.checked_sub(start.elapsed()) {
-            std::thread::sleep(remaining);
+        if let Some(rem) = TICK.checked_sub(start.elapsed()) {
+            std::thread::sleep(rem);
         }
     }
 }
